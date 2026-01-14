@@ -16,18 +16,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from core.views import pagina_inicial, pagina_sobre, detalhe_produto # <--- Adicione detalhe_produto
-
 from django.conf import settings
 from django.conf.urls.static import static
+from core.views import pagina_inicial, pagina_sobre, detalhe_produto
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', pagina_inicial),
-    path('sobre/', pagina_sobre),
-    # A MÁGICA ESTÁ AQUI: <int:id> diz "aceite qualquer número e chame ele de 'id'"
-    path('produto/<int:id>/', detalhe_produto), 
+    path('', pagina_inicial, name='pagina_inicial'),
+    path('sobre/', pagina_sobre, name='pagina_sobre'),
+    path('produto/<int:id>/', detalhe_produto, name='detalhe_produto'),
 ]
 
+# Adiciona a rota para servir imagens de mídia (SÓ funciona se DEBUG=True)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

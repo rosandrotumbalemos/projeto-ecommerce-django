@@ -1,27 +1,30 @@
-from django.shortcuts import render
-from core.models import Produto  # <--- 1. Importamos a tabela
+from django.shortcuts import render, get_object_or_404
+from .models import Produto
 
+# 1. A página principal (que o urls.py chama de pagina_inicial)
 def pagina_inicial(request):
-    # 2. Buscamos TODOS os produtos do banco (SELECT * FROM Produto)
     produtos = Produto.objects.all()
+    
+    # --- O ESPIÃO ESTÁ AQUI ---
+    print("--------------------------------------------------")
+    print("ESPIÃO: ESTOU DENTRO DA PAGINA_INICIAL!") 
+    print(f"ESPIÃO: Encontrei {produtos.count()} produtos no banco.")
+    print("--------------------------------------------------")
+    # --------------------------
 
-    # 3. Criamos um "dicionário de contexto"
-    # É como uma caixa de entregas. O nome 'lista_produtos' é como vamos chamar lá no HTML
-    contexto = {
-        'lista_produtos': produtos
+    context = {
+        'produtos': produtos
     }
+    return render(request, 'index.html', context)
 
-    # 4. Entregamos a caixa junto com o HTML
-    return render(request, 'index.html', contexto)
-
+# 2. A página Sobre (para não dar erro de importação)
 def pagina_sobre(request):
     return render(request, 'sobre.html')
 
+# 3. A página de Detalhes (para não dar erro de importação)
 def detalhe_produto(request, id):
-    # Buscamos o produto onde o id no banco é igual ao id da URL
-    produto = Produto.objects.get(id=id)
-
-    contexto = {
+    produto = get_object_or_404(Produto, id=id)
+    context = {
         'produto': produto
     }
-    return render(request, 'detalhe.html', contexto)
+    return render(request, 'detalhe_produto.html', context)
