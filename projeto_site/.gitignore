@@ -1,0 +1,7 @@
+# Arquivos do Django e Python que não devem subir
+venv/
+__pycache__/
+*.pyc
+db.sqlite3
+.DS_Store
+media/
